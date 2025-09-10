@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おなじポーズをしよう</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f2e8; /* 背景色を薄いベージュに変更 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+        }
+        .image-container {
+            width: 100%;
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+        .image-container img.active {
+            display: block;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .control-button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .start-button, .next-button {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .start-button:hover, .next-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+        .auto-button, .stop-button {
+            background-color: #10b981;
+            color: white;
+        }
+        .auto-button:hover, .stop-button:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+        .disabled-button {
+            background-color: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold text-center text-gray-800">おなじポーズをしよう</h1>
+
+        <div class="image-container w-full h-96 bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center">
+            <div id="placeholder" class="text-gray-500 text-lg">スタートボタンを押して開始</div>
+            <img id="poseImage" class="hidden transition-opacity duration-300" src="" alt="表示されたポーズ">
+        </div>
+        
+        <div class="button-group mt-4">
+            <button id="startButton" class="control-button bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                スタート
+            </button>
+            <button id="nextButton" class="control-button bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 hidden">
+                次へ
+            </button>
+            <button id="autoButton" class="control-button bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                自動再生
+            </button>
+            <button id="stopButton" class="control-button bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hidden">
+                ストップ
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const imagePaths = [
+                'images/01.png', 'images/02.png', 'images/03.png', 'images/04.png', 'images/05.png',
+                'images/06.png', 'images/07.png', 'images/08.png', 'images/09.png', 'images/10.png',
+                'images/11.png', 'images/12.png', 'images/13.png', 'images/14.png', 'images/15.png'
+            ];
+
+            const startButton = document.getElementById('startButton');
+            const nextButton = document.getElementById('nextButton');
+            const autoButton = document.getElementById('autoButton');
+            const stopButton = document.getElementById('stopButton');
+            const poseImage = document.getElementById('poseImage');
+            const placeholder = document.getElementById('placeholder');
+            
+            let intervalId = null;
+
+            // ランダムな画像を1枚表示
+            const displayRandomImage = () => {
+                const randomIndex = Math.floor(Math.random() * imagePaths.length);
+                const imagePath = imagePaths[randomIndex];
+                poseImage.src = imagePath;
+
+                // プレースホルダーを非表示にし、画像をフェードイン
+                placeholder.classList.add('hidden');
+                poseImage.classList.remove('hidden');
+            };
+
+            // 自動再生を開始
+            const startAutoPlay = () => {
+                displayRandomImage(); // 最初の1枚を即時表示
+                intervalId = setInterval(() => {
+                    displayRandomImage();
+                }, 3000);
+                autoButton.classList.add('hidden');
+                stopButton.classList.remove('hidden');
+                nextButton.classList.add('hidden');
+            };
+
+            // 自動再生を停止
+            const stopAutoPlay = () => {
+                clearInterval(intervalId);
+                intervalId = null;
+                stopButton.classList.add('hidden');
+                autoButton.classList.remove('hidden');
+                nextButton.classList.remove('hidden');
+            };
+
+            // スタートボタンのクリックイベント
+            startButton.addEventListener('click', () => {
+                displayRandomImage();
+                startButton.classList.add('hidden');
+                nextButton.classList.remove('hidden');
+                autoButton.classList.remove('hidden');
+            });
+
+            // 次へボタンのクリックイベント
+            nextButton.addEventListener('click', () => {
+                displayRandomImage();
+            });
+
+            // 自動再生ボタンのクリックイベント
+            autoButton.addEventListener('click', () => {
+                // 自動再生中に手動切り替えが行われた場合、自動再生を停止
+                if (intervalId) {
+                    stopAutoPlay();
+                }
+                startAutoPlay();
+            });
+
+            // ストップボタンのクリックイベント
+            stopButton.addEventListener('click', () => {
+                stopAutoPlay();
+            });
+        });
+    </script>
+</body>
+</html>
