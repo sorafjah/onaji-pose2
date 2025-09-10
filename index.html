@@ -112,12 +112,6 @@
                 ストップ
             </button>
         </div>
-
-        <div class="mt-8 text-center">
-            <button id="downloadButton" class="bg-gray-500 text-white py-2 px-6 rounded-full font-bold shadow-md hover:bg-gray-600 transition-colors">
-                コードをダウンロード
-            </button>
-        </div>
     </div>
 
     <script>
@@ -132,7 +126,6 @@
             const nextButton = document.getElementById('nextButton');
             const autoButton = document.getElementById('autoButton');
             const stopButton = document.getElementById('stopButton');
-            const downloadButton = document.getElementById('downloadButton');
             const poseImage = document.getElementById('poseImage');
             const placeholder = document.getElementById('placeholder');
             
@@ -194,20 +187,6 @@
             // ストップボタンのクリックイベント
             stopButton.addEventListener('click', () => {
                 stopAutoPlay();
-            });
-
-            // ダウンロードボタンのクリックイベント
-            downloadButton.addEventListener('click', () => {
-                const htmlContent = document.documentElement.outerHTML;
-                const blob = new Blob([htmlContent], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'onaji-pose-wo-shiyou.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
             });
         });
     </script>
