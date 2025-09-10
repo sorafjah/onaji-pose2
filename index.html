@@ -40,7 +40,6 @@
             overflow: hidden;
             position: relative;
         }
-        /* ★修正点: display:none と .active に関する記述を削除 */
         .image-container img {
             max-width: 100%;
             max-height: 400px; /* 高さを固定してレイアウト崩れを防ぐ */
@@ -89,7 +88,8 @@
             <button id="autoButton" class="control-button bg-green-500 text-white hover:bg-green-600 hidden">
                 自動再生
             </button>
-            <button id="stopButton" class="control-button bg-red-500 text-white hover:bg-red-600 hidden">
+            <!-- ★修正点: ボタンの色を赤からオレンジに変更 -->
+            <button id="stopButton" class="control-button bg-orange-500 text-white hover:bg-orange-600 hidden">
                 ストップ
             </button>
         </div>
