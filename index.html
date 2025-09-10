@@ -132,7 +132,7 @@
             // 自動再生を開始
             const startAutoPlay = () => {
                 displayRandomImage(); // 最初の1枚を即時表示
-                intervalId = setInterval(displayRandomImage, 3000);
+                intervalId = setInterval(displayRandomImage, 2000); /* 3000から2000に変更 */
                 autoButton.classList.add('hidden');
                 stopButton.classList.remove('hidden');
                 nextButton.classList.add('hidden');
@@ -172,4 +172,5 @@
     </script>
 </body>
 </html>
+
 
