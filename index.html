@@ -74,7 +74,6 @@
 
         <div class="image-container">
             <div id="placeholder" class="text-gray-500 text-lg">スタートボタンを押して開始</div>
-            <!-- 初期状態は hidden クラスで非表示にする -->
             <img id="poseImage" class="hidden" src="" alt="表示されたポーズ">
         </div>
         
@@ -88,7 +87,6 @@
             <button id="autoButton" class="control-button bg-green-500 text-white hover:bg-green-600 hidden">
                 自動再生
             </button>
-            <!-- ★修正点: ボタンの色を赤からオレンジに変更 -->
             <button id="stopButton" class="control-button bg-orange-500 text-white hover:bg-orange-600 hidden">
                 ストップ
             </button>
@@ -136,7 +134,8 @@
             // 自動再生を開始
             const startAutoPlay = () => {
                 displayRandomImage(); // 最初の1枚を即時表示
-                intervalId = setInterval(displayRandomImage, 2000); /* 3000から2000に変更 */
+                // ★★★ ここを2000から3000に変更 ★★★
+                intervalId = setInterval(displayRandomImage, 3000); 
                 autoButton.classList.add('hidden');
                 stopButton.classList.remove('hidden');
                 nextButton.classList.add('hidden');
